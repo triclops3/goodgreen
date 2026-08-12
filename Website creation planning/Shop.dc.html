@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<![CDATA[<helmet>
+  <link rel="stylesheet" href="_ds/modernist-63e822e9-17a4-4807-bb72-8667ef67d241/styles.css">
+  <script src="_ds/modernist-63e822e9-17a4-4807-bb72-8667ef67d241/_ds_bundle.js"></script>
+  <style>
+    body { margin: 0; text-wrap: pretty; }
+    a { color: var(--color-accent); text-decoration: none; }
+    a:hover { color: var(--color-accent-600); }
+  </style>
+</helmet>
+
+<nav class="nav" style="padding:20px 48px;">
+  <a href="Home.dc.html" class="nav-brand" style="text-decoration:none;color:inherit;">GREENBEAN DIRECT</a>
+  <a href="Shop.dc.html" aria-current="page">Shop</a>
+  <a href="About.dc.html">About</a>
+  <a href="Blog.dc.html">Blog</a>
+  <button type="button" onClick="{{ openCart }}" class="btn btn-icon" aria-label="Cart" style="margin-left:8px;position:relative;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    <sc-if value="{{ hasItems }}">
+      <span style="position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;border-radius:50%;background:var(--color-accent);color:var(--color-bg);font-size:9px;line-height:16px;text-align:center;font-weight:800;">{{ cartCount }}</span>
+    </sc-if>
+  </button>
+</nav>
+
+<section style="padding:64px 48px 32px;">
+  <span class="tag tag-outline" style="margin-bottom:20px;">Shop</span>
+  <h1 style="font-size:clamp(32px,4.4vw,48px);letter-spacing:-0.02em;margin:0 0 16px;">Our Green Coffee Collection</h1>
+  <p style="font-size:17px;line-height:1.6;max-width:56ch;opacity:0.78;margin:0;">Explore origins from four continents and find the perfect beans for your next roast.</p>
+</section>
+
+<section style="padding:0 48px 24px;">
+  <div class="seg">
+    <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+      <label class="seg-opt">
+        <input type="radio" name="process-filter" checked="{{ f.checked }}" onChange="{{ f.select }}">
+        {{ f.name }}
+      </label>
+    </sc-for>
+  </div>
+</section>
+
+<section style="padding:24px 48px 80px;">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;">
+    <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
+      <div style="background:var(--color-bg);border:1px solid var(--color-divider);display:flex;flex-direction:column;">
+        <figure style="margin:0;aspect-ratio:4/3;overflow:hidden;">
+          <img src="{{ p.img }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </figure>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:6px;flex:1;">
+          <p style="font-family:var(--font-heading);font-weight:800;font-size:16px;margin:0;">{{ p.name }}</p>
+          <div style="display:flex;gap:6px;">
+            <span class="tag tag-neutral">{{ p.process }}</span>
+            <span class="tag tag-outline">{{ p.score }} pts</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:12px;">
+            <span style="font-family:var(--font-heading);font-weight:800;font-size:16px;">{{ p.price }}</span>
+            <sc-if value="{{ p.hasQty }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <button type="button" onClick="{{ p.dec }}" class="btn btn-icon" style="width:28px;height:28px;border:1px solid var(--color-divider);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+                </button>
+                <span style="font-size:13px;font-weight:800;min-width:14px;text-align:center;">{{ p.qty }}</span>
+                <button type="button" onClick="{{ p.inc }}" class="btn btn-icon" style="width:28px;height:28px;border:1px solid var(--color-divider);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                </button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ p.noQty }}" hint-placeholder-val="{{ true }}">
+              <button type="button" onClick="{{ p.inc }}" class="btn btn-secondary" style="font-size:13px;padding:8px 14px;">Add</button>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<footer style="border-top:2px solid var(--color-divider);padding:56px 48px 32px;">
+  <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px;">
+    <div>
+      <p class="nav-brand" style="margin:0 0 12px;">GREENBEAN DIRECT</p>
+      <p style="font-size:14px;max-width:34ch;opacity:0.75;margin:0 0 20px;">Green coffee sourced direct from producers, sold direct to roasters.</p>
+      <div class="field" style="max-width:320px;">
+        <label>Join the list for new arrivals and roasting notes</label>
+        <div style="display:flex;gap:8px;">
+          <input class="input" type="email" placeholder="Enter your email" style="flex:1;">
+          <button class="btn btn-primary" type="button">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.6;margin:0 0 16px;">Quick links</p>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+        <a href="Home.dc.html">Home</a><a href="Shop.dc.html">Shop</a><a href="About.dc.html">About</a><a href="Blog.dc.html">Blog</a>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.6;margin:0 0 16px;">Resources</p>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+        <a href="#">FAQ</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Terms</a>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.6;margin:0 0 16px;">Follow us</p>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+        <a href="#">Instagram</a><a href="#">X</a><a href="#">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+  <div style="border-top:2px solid var(--color-divider);padding-top:20px;display:flex;justify-content:space-between;font-size:12px;opacity:0.6;">
+    <span>© 2026 GreenBean Direct. All rights reserved.</span>
+    <div style="display:flex;gap:24px;"><a href="#">Privacy policy</a><a href="#">Terms of service</a></div>
+  </div>
+</footer>
+
+<sc-if value="{{ cartOpen }}">
+  <div class="dialog-backdrop" onClick="{{ closeCart }}" style="z-index:999;">
+    <div class="dialog" onClick="{{ stopClick }}" style="width:420px;max-height:80vh;overflow:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <p class="dialog-title" style="margin:0;">Your cart</p>
+        <button type="button" onClick="{{ closeCart }}" class="btn btn-icon" style="width:28px;height:28px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <sc-if value="{{ hasItems }}">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <sc-for list="{{ cartItems }}" as="c" hint-placeholder-count="2">
+            <div style="display:flex;gap:12px;align-items:center;">
+              <figure style="margin:0;width:56px;height:56px;flex:none;overflow:hidden;">
+                <img src="{{ c.img }}" alt="{{ c.name }}" style="width:100%;height:100%;object-fit:cover;display:block;">
+              </figure>
+              <div style="flex:1;">
+                <p style="font-size:14px;font-weight:800;font-family:var(--font-heading);margin:0 0 2px;">{{ c.name }}</p>
+                <p style="font-size:12px;opacity:0.6;margin:0;">{{ c.price }} × {{ c.qty }}</p>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <button type="button" onClick="{{ c.dec }}" class="btn btn-icon" style="width:24px;height:24px;border:1px solid var(--color-divider);">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+                </button>
+                <span style="font-size:12px;font-weight:800;min-width:12px;text-align:center;">{{ c.qty }}</span>
+                <button type="button" onClick="{{ c.inc }}" class="btn btn-icon" style="width:24px;height:24px;border:1px solid var(--color-divider);">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                </button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div class="dialog-actions" style="justify-content:space-between;align-items:center;">
+          <p style="font-size:15px;font-weight:800;font-family:var(--font-heading);margin:0;">Total: {{ cartTotal }}</p>
+          <button type="button" class="btn btn-primary">Checkout</button>
+        </div>
+        <p style="font-size:11px;opacity:0.55;margin:0;">Checkout isn't wired up in this preview.</p>
+      </sc-if>
+      <sc-if value="{{ noItems }}" hint-placeholder-val="{{ false }}">
+        <p class="dialog-body">Your cart is empty. Add a lot to get started.</p>
+      </sc-if>
+    </div>
+  </div>
+</sc-if>
+]]>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+<![CDATA[class Component extends DCLogic {
+  state = { filter: 'All', cart: {}, cartOpen: false };
+
+  products = [
+    { id: 'p1', name: 'Ethiopia Yirgacheffe', process: 'Washed', score: 87, priceNum: 7.5, img: 'images/product-6.jpg' },
+    { id: 'p2', name: 'Colombia Huila', process: 'Washed', score: 85, priceNum: 6.8, img: 'images/product-9.jpg' },
+    { id: 'p3', name: 'Guatemala Antigua', process: 'Washed', score: 86, priceNum: 7.1, img: 'images/product-2.jpg' },
+    { id: 'p4', name: 'Brazil Cerrado', process: 'Natural', score: 83, priceNum: 5.9, img: 'images/product-4.jpg' },
+    { id: 'p5', name: 'Sumatra Mandheling', process: 'Wet-hulled', score: 84, priceNum: 8.2, img: 'images/product-0.jpg' },
+    { id: 'p6', name: 'Kenya AA', process: 'Washed', score: 88, priceNum: 8.9, img: 'images/product-1.jpg' },
+    { id: 'p7', name: 'Ethiopia Sidama', process: 'Natural', score: 86, priceNum: 7.8, img: 'images/product-3.jpg' },
+    { id: 'p8', name: 'Costa Rica Tarrazú', process: 'Honey', score: 85, priceNum: 8.5, img: 'images/product-5.jpg' },
+    { id: 'p9', name: 'Panama Boquete', process: 'Washed', score: 89, priceNum: 9.4, img: 'images/product-7.jpg' },
+    { id: 'p10', name: 'El Salvador Pacamara', process: 'Natural', score: 87, priceNum: 8.7, img: 'images/product-10.jpg' },
+  ];
+
+  setFilter = (f) => this.setState({ filter: f });
+  add = (id) => this.setState((s) => ({ cart: { ...s.cart, [id]: (s.cart[id] || 0) + 1 }, cartOpen: true }));
+  dec = (id) => this.setState((s) => {
+    const cart = { ...s.cart };
+    if (cart[id] > 1) cart[id] -= 1; else delete cart[id];
+    return { cart };
+  });
+  openCart = () => this.setState({ cartOpen: true });
+  closeCart = () => this.setState({ cartOpen: false });
+
+  renderVals() {
+    const { filter, cart } = this.state;
+    const filtered = filter === 'All' ? this.products : this.products.filter((p) => p.process === filter);
+    const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
+    const cartItems = Object.keys(cart).map((id) => {
+      const p = this.products.find((x) => x.id === id);
+      return { ...p, price: '$' + p.priceNum.toFixed(2) + '/lb', qty: cart[id], inc: () => this.add(id), dec: () => this.dec(id) };
+    });
+    const cartTotal = '$' + cartItems.reduce((sum, c) => sum + c.priceNum * c.qty, 0).toFixed(2);
+    return {
+      filters: ['All', 'Washed', 'Natural', 'Honey', 'Wet-hulled'].map((f) => ({ name: f, checked: f === filter, select: () => this.setFilter(f) })),
+      products: filtered.map((p) => {
+        const qty = cart[p.id] || 0;
+        return { ...p, price: '$' + p.priceNum.toFixed(2) + '/lb', qty, hasQty: qty > 0, noQty: qty === 0, inc: () => this.add(p.id), dec: () => this.dec(p.id) };
+      }),
+      cartOpen: this.state.cartOpen,
+      hasItems: cartCount > 0,
+      noItems: cartCount === 0,
+      cartCount,
+      cartItems,
+      cartTotal,
+      openCart: this.openCart,
+      closeCart: this.closeCart,
+      stopClick: (e) => e.stopPropagation(),
+    };
+  }
+}
+]]>
+</script>
+</body>
+</html>
